@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
+import '../models/item_model.dart';
 
 class DBHelper {
   // Private constructor for Singleton pattern
@@ -64,25 +65,13 @@ class DBHelper {
     }
   }
 
-  // Add an item into the database
-  Future<bool> addItem({
-    required String name,
-    required String category,
-    required String expiryDate,
-    required int quantity,
-    required String unit,
-  }) async {
+  // Add item using the Item model
+  Future<bool> addItem(Item item) async {
     try {
       final db = await database;
       int rowsAffected = await db.insert(
         TABLE_ITEM,
-        {
-          COLUMN_ITEM_NAME: name,
-          COLUMN_ITEM_CATEGORY: category,
-          COLUMN_ITEM_EXPIRY: expiryDate,
-          COLUMN_ITEM_QUANTITY: quantity,
-          COLUMN_ITEM_UNIT: unit,
-        },
+        item.toMap(),
       );
       return rowsAffected > 0;
     } catch (e) {
@@ -91,55 +80,47 @@ class DBHelper {
     }
   }
 
-  // Get all items from the database
-  Future<List<Map<String, dynamic>>> getAllItems() async {
+  // Get all items, now returning List<Item>
+  Future<List<Item>> getAllItems() async {
     try {
       final db = await database;
-
-      /// this means = select * from item
-      return await db.query(TABLE_ITEM);
+      final maps = await db.query(TABLE_ITEM);
+      return maps.map((map) => Item.fromMap(map)).toList();
     } catch (e) {
       debugPrint("Error fetching items: $e");
       return [];
     }
   }
 
-  // Update an item
-  Future<bool> updateItem({
-    required int sno,
-    required String name,
-    required String category,
-    required String expiryDate,
-    required int quantity,
-    required String unit,
-  }) async {
+  // Update an item using the Item model
+  Future<bool> updateItem(Item item) async {
     try {
       final db = await database;
       int rowsUpdated = await db.update(
-          TABLE_ITEM,
-          {
-            COLUMN_ITEM_NAME: name,
-            COLUMN_ITEM_CATEGORY: category,
-            COLUMN_ITEM_EXPIRY: expiryDate,
-            COLUMN_ITEM_QUANTITY: quantity,
-            COLUMN_ITEM_UNIT: unit,
-          },
-          where: "$COLUMN_ITEM_SNO = $sno");
+        TABLE_ITEM,
+        item.toMap(),
+        where: "$COLUMN_ITEM_SNO = ?",
+        whereArgs: [item.serialNumber],
+      );
       return rowsUpdated > 0;
     } catch (e) {
-      debugPrint('error updating $e');
+      debugPrint('Error updating item: $e');
       return false;
     }
   }
 
   // Delete an item
   Future<bool> deleteItem({required int sno}) async {
-    try{
-    var db = await database;
-    int rowsDeleted = await db.delete(TABLE_ITEM, where: "$COLUMN_ITEM_SNO= ?", whereArgs: ['$sno']);
-    return rowsDeleted > 0;}
-    catch(e){
-      debugPrint('error deleting an item $e');
+    try {
+      var db = await database;
+      int rowsDeleted = await db.delete(
+        TABLE_ITEM, 
+        where: "$COLUMN_ITEM_SNO = ?", 
+        whereArgs: [sno]
+      );
+      return rowsDeleted > 0;
+    } catch (e) {
+      debugPrint('Error deleting an item: $e');
       return false;
     }
   }

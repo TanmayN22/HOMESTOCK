@@ -5,6 +5,12 @@ class FinishedExpiredItemsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text('Bin Page'));
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Expired/finished Products "
+        ),
+      ),
+    );
   }
 }

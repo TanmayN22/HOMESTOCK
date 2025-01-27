@@ -32,9 +32,6 @@ class CustomBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
-      shape: const CircularNotchedRectangle(), // Creates a notch effect
-      notchMargin: 20.0, // Margin for the FAB notch
-      clipBehavior: Clip.antiAlias, // Anti-aliasing for smoother edges
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround, // Distribute the items evenly
         children: <Widget>[
@@ -53,8 +50,6 @@ class CustomBottomNavBar extends StatelessWidget {
             selectedColor: AppColors.primaryColor,
             unselectedColor: AppColors.neutralColor,
           ),
-
-          const SizedBox(width: 40), // Spacer for Floating Action Button (FAB)
 
           // Delete Icon Button
           _buildIconButton(

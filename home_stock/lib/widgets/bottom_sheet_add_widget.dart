@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:home_stock/database/db_helper.dart'; // Database Helper
 import 'package:home_stock/utils/validation_utils.dart'; // Validation Utility
 import 'package:home_stock/utils/date_picker_helper.dart'; // Date Picker Utility
-import '../utils/app_colors.dart'; //
+import '../utils/app_colors.dart';
+import '../models/item_model.dart';
 
 class BottomSheetView extends StatefulWidget {
-  final Map<String, dynamic>? item;
+  final Item? item;
   const BottomSheetView({super.key, this.item});
 
   @override
@@ -28,10 +29,10 @@ class _BottomSheetViewState extends State<BottomSheetView> {
 
   // Date Picker: Opens a date picker dialog for selecting expiry date
   Future<void> _selectDate() async {
-    DateTime? picked = await DatePickerHelper.selectDate(context); // Reusable method
+    DateTime? picked = await DatePickerHelper.selectDate(context);
     if (picked != null) {
       setState(() {
-        expiryDateController.text = picked.toLocal().toString().split(' ')[0]; // Format date
+        expiryDateController.text = picked.toLocal().toString().split(' ')[0];
       });
     }
   }
@@ -41,6 +42,7 @@ class _BottomSheetViewState extends State<BottomSheetView> {
     // Dispose controllers when widget is destroyed
     itemNameController.dispose();
     quantityController.dispose();
+    expiryDateController.dispose();
     super.dispose();
   }
 
@@ -55,7 +57,6 @@ class _BottomSheetViewState extends State<BottomSheetView> {
     );
   }
 
-  // Check if editing
   @override
   void initState() {
     super.initState();
@@ -63,13 +64,11 @@ class _BottomSheetViewState extends State<BottomSheetView> {
     // Check if editing an item (if item is passed)
     if (widget.item != null) {
       isUpdate = true;
-
-      // Initialize fields with item data
-      itemNameController.text = widget.item!['name'] ?? '';
-      selectedCategory = widget.item!['category'] ?? '';
-      expiryDateController.text = widget.item!['expiryDate'] ?? '';
-      quantityController.text = widget.item!['quantity'].toString();
-      selectedUnit = widget.item!['unit'] ?? 'Kg'; // Set the unit
+      itemNameController.text = widget.item!.name;
+      selectedCategory = widget.item!.category;
+      expiryDateController.text = widget.item!.expiryDate;
+      quantityController.text = widget.item!.quantity.toString();
+      selectedUnit = widget.item!.unit;
     }
   }
 
@@ -112,7 +111,7 @@ class _BottomSheetViewState extends State<BottomSheetView> {
           ),
           const SizedBox(height: 12),
 
-          // Category, Quantity and Unit Fields
+          // Category, Quantity, and Unit Fields
           const Row(
             children: [
               Padding(
@@ -138,19 +137,8 @@ class _BottomSheetViewState extends State<BottomSheetView> {
                       ),
                     ),
                   ),
-                  inputDecorationTheme: InputDecorationTheme(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(11),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(11),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(11),
-                    ),
-                  ),
                   width: 150,
-                  hintText: 'Select category',
+                  initialSelection: selectedCategory,
                   dropdownMenuEntries: category.map((category) => DropdownMenuEntry(value: category, label: category)).toList(),
                   onSelected: (String? value) {
                     setState(() {
@@ -159,6 +147,7 @@ class _BottomSheetViewState extends State<BottomSheetView> {
                   },
                 ),
               ),
+
               // Quantity Input Field
               SizedBox(
                 width: 110,
@@ -178,6 +167,7 @@ class _BottomSheetViewState extends State<BottomSheetView> {
                 ),
               ),
               const SizedBox(width: 10),
+
               // Unit Dropdown
               DropdownMenu<String>(
                 menuStyle: MenuStyle(
@@ -185,17 +175,6 @@ class _BottomSheetViewState extends State<BottomSheetView> {
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(11),
                     ),
-                  ),
-                ),
-                inputDecorationTheme: InputDecorationTheme(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(11),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(11),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(11),
                   ),
                 ),
                 width: 90,
@@ -210,7 +189,8 @@ class _BottomSheetViewState extends State<BottomSheetView> {
             ],
           ),
           const SizedBox(height: 25),
-          // Expiry Date Field (with calendar icon)
+
+          // Expiry Date Field
           TextField(
             controller: expiryDateController,
             decoration: InputDecoration(
@@ -231,6 +211,7 @@ class _BottomSheetViewState extends State<BottomSheetView> {
             onTap: _selectDate,
           ),
           const SizedBox(height: 30),
+
           // Buttons (Add and Cancel)
           Row(
             children: [
@@ -246,39 +227,26 @@ class _BottomSheetViewState extends State<BottomSheetView> {
                       debugPrint("Button Pressed: ${isUpdate ? 'Update' : 'Add'}");
                       if (_isFormValid()) {
                         try {
-                          if (isUpdate) {
-                            debugPrint("Attempting to update item...");
-                            bool check = await DBHelper.instance.updateItem(
-                              sno: widget.item!['s_no'],
-                              name: itemNameController.text,
-                              category: selectedCategory!,
-                              expiryDate: expiryDateController.text,
-                              quantity: int.parse(quantityController.text),
-                              unit: selectedUnit!,
+                          final itemToSave = Item(
+                            serialNumber: isUpdate ? widget.item!.serialNumber : null,
+                            name: itemNameController.text,
+                            category: selectedCategory!,
+                            expiryDate: expiryDateController.text,
+                            quantity: int.parse(quantityController.text),
+                            unit: selectedUnit!,
+                          );
+
+                          bool result = isUpdate ? await DBHelper.instance.updateItem(itemToSave) : await DBHelper.instance.addItem(itemToSave);
+
+                          debugPrint("${isUpdate ? 'Update' : 'Insert'} result: $result");
+
+                          if (result) {
+                            Navigator.pop(context, true);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(isUpdate ? 'Item updated successfully' : 'Item added successfully'),
+                              ),
                             );
-                            debugPrint("Update result: $check");
-                            if (check) {
-                              Navigator.pop(context, true);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Item updated successfully')),
-                              );
-                            }
-                          } else {
-                            debugPrint("Attempting to add new item...");
-                            bool insert = await DBHelper.instance.addItem(
-                              name: itemNameController.text,
-                              category: selectedCategory!,
-                              expiryDate: expiryDateController.text,
-                              quantity: int.parse(quantityController.text),
-                              unit: selectedUnit!,
-                            );
-                            debugPrint("Insert result: $insert");
-                            if (insert) {
-                              Navigator.pop(context, true);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Item added successfully')),
-                              );
-                            }
                           }
                         } catch (e) {
                           debugPrint("Error occurred: $e");
@@ -293,10 +261,7 @@ class _BottomSheetViewState extends State<BottomSheetView> {
                         );
                       }
                     },
-                    child: Text(
-                      isUpdate ? 'Update' : 'Add',
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.normal),
-                    ),
+                    child: Text(isUpdate ? 'Update' : 'Add', style: const TextStyle(color: Colors.white)),
                   ),
                 ),
               ),
@@ -305,14 +270,8 @@ class _BottomSheetViewState extends State<BottomSheetView> {
                 child: SizedBox(
                   height: 55,
                   child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      side: const BorderSide(width: 1),
-                    ),
                     onPressed: () => Navigator.pop(context),
-                    child: const Text(
-                      'Cancel',
-                      style: TextStyle(color: AppColors.neutralVariantColor, fontWeight: FontWeight.normal),
-                    ),
+                    child: const Text('Cancel', style: TextStyle(color: AppColors.neutralVariantColor)),
                   ),
                 ),
               ),
