@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../utils/app_colors.dart';
+import '../utils/themes/app_colors.dart';
 
 // Custom Bottom Navigation Bar Widget
 class CustomBottomNavBar extends StatelessWidget {

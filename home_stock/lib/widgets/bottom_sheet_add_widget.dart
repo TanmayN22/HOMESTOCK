@@ -1,9 +1,9 @@
 // ignore_for_file: non_constant_identifier_names, use_build_context_synchronously
 import 'package:flutter/material.dart';
 import 'package:home_stock/database/db_helper.dart'; // Database Helper
-import 'package:home_stock/utils/validation_utils.dart'; // Validation Utility
-import 'package:home_stock/utils/date_picker_helper.dart'; // Date Picker Utility
-import '../utils/app_colors.dart';
+import 'package:home_stock/utils/helpers/validation_utils.dart'; // Validation Utility
+import 'package:home_stock/utils/helpers/date_picker_helper.dart'; // Date Picker Utility
+import '../utils/themes/app_colors.dart';
 import '../models/item_model.dart';
 
 class BottomSheetView extends StatefulWidget {
