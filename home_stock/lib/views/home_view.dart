@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:home_stock/database/db_helper.dart';
+import 'package:home_stock/widgets/appbar.dart';
 import 'package:home_stock/widgets/custom_shapes/primary_header_container.dart';
 import '../widgets/bottom_sheet_add_widget.dart';
 import '../utils/themes/app_colors.dart';
@@ -43,10 +44,13 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             PrimaryHeaderContainer(
-              child: Column(
-                children: [],
-              ),
-            ),
+                child: Column(
+              children: [
+                CustomAppbar(
+                  title: Text('HOMESTOCK'),
+                )
+              ],
+            ))
           ],
         ),
       ),

@@ -8,7 +8,8 @@ import 'package:home_stock/widgets/custom_shapes/curved_edge_border.dart';
 
 class PrimaryHeaderContainer extends StatelessWidget {
   const PrimaryHeaderContainer({
-    super.key, required this.child,
+    super.key,
+    required this.child,
   });
 
   final Widget child;
@@ -30,11 +31,10 @@ class PrimaryHeaderContainer extends StatelessWidget {
                 top: -100,
                 right: -80,
                 child: ImageFiltered(
-                  imageFilter: ImageFilter.blur(sigmaX: 100, sigmaY: 200),
-                  child: CircularContainer(
-                    backgroundColor: AppColors.primaryColor.withOpacity(0.8),
-                  ),
-                ),
+                    imageFilter: ImageFilter.blur(sigmaX: 100, sigmaY: 200),
+                    child: CircularContainer(
+                      backgroundColor: AppColors.primaryColor.withOpacity(0.75),
+                    )),
               ),
               Positioned(
                 top: 100,
@@ -42,10 +42,11 @@ class PrimaryHeaderContainer extends StatelessWidget {
                 child: ImageFiltered(
                   imageFilter: ImageFilter.blur(sigmaX: 100, sigmaY: 200),
                   child: CircularContainer(
-                    backgroundColor: AppColors.primaryColor.withOpacity(0.4),
+                    backgroundColor: AppColors.primaryColor.withOpacity(0.75),
                   ),
                 ),
               ),
+              child,
             ],
           ),
         ),

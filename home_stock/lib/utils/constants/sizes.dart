@@ -66,5 +66,4 @@ class Sizes {
 
   // Grid view spacing
   static const double gridViewSpacing = 16.0;
-
 }
