@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:home_stock/utils/device/device_utlity.dart';
 import 'package:home_stock/views/home_view.dart';
 import 'package:home_stock/views/cart_view.dart';
 import 'package:home_stock/views/finished_expired_items_view.dart';
 import 'package:home_stock/views/profile_view.dart';
-import 'package:home_stock/widgets/bottom_nav_bar.dart';
+import 'package:home_stock/widgets/custom_widgets/bottom_nav_bar.dart';
 
 void main() {
   runApp(const FoodInventoryApp());
@@ -29,9 +30,12 @@ class FoodInventoryApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: Obx(() => _pages[controller.selectedIndex.value]),
-        bottomNavigationBar: CustomBottomNavBar(
-          selectedIndex: controller.selectedIndex.value,
-          onItemSelected: (index) => controller.changeIndex(index),
+        bottomNavigationBar: SizedBox(
+          height: DeviceUtils.getBottomNavigationBarHeight(),
+          child: CustomBottomNavBar(
+            selectedIndex: controller.selectedIndex.value,
+            onItemSelected: (index) => controller.changeIndex(index),
+          ),
         ),
       ),
     );

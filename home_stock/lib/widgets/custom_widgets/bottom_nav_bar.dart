@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../utils/themes/app_colors.dart';
+import '../../utils/themes/app_colors.dart';
 
 // Custom Bottom Navigation Bar Widget
 class CustomBottomNavBar extends StatelessWidget {
-  final int selectedIndex; // Selected index to highlight the active item
-  final Function(int) onItemSelected; // Callback when an item is selected
+  final int selectedIndex;
+  final Function(int) onItemSelected;
 
   const CustomBottomNavBar({
     super.key,
@@ -23,9 +23,9 @@ class CustomBottomNavBar extends StatelessWidget {
       icon: Icon(
         icon,
         size: 25,
-        color: selectedIndex == index ? selectedColor : unselectedColor, // Color logic based on selected index
+        color: selectedIndex == index ? selectedColor : unselectedColor,
       ),
-      onPressed: () => onItemSelected(index), // Trigger onItemSelected callback
+      onPressed: () => onItemSelected(index),
     );
   }
 
@@ -33,7 +33,7 @@ class CustomBottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomAppBar(
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround, // Distribute the items evenly
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           // Home Icon Button
           _buildIconButton(
