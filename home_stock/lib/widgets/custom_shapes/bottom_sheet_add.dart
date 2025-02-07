@@ -5,6 +5,7 @@ import 'package:home_stock/utils/helpers/validation_utils.dart'; // Validation U
 import 'package:home_stock/utils/helpers/date_picker_helper.dart'; // Date Picker Utility
 import '../../utils/themes/app_colors.dart';
 import '../../models/item_model.dart';
+import 'package:home_stock/utils/constants/categories.dart';
 
 class BottomSheetView extends StatefulWidget {
   final Item? item;
@@ -21,8 +22,9 @@ class _BottomSheetViewState extends State<BottomSheetView> {
   final TextEditingController expiryDateController = TextEditingController();
 
   // Category and Unit options
-  List<String> category = ['Vegetables', 'Fruits', 'Grains', 'Rice', 'Dairy'];
-  List<String> quantity = ['Kg', 'g', 'L', 'ml'];
+  List<String> category = CategoryConstants.categories;
+  List<String> quantity = CategoryConstants.units;
+
   String? selectedCategory = 'Vegetables';
   String? selectedUnit = 'Kg';
   bool isUpdate = false;
