@@ -5,7 +5,9 @@ import 'package:home_stock/utils/themes/app_colors.dart';
 import 'package:home_stock/widgets/custom_shapes/bottom_sheet_add.dart';
 
 class AddItemButton extends StatefulWidget {
-  const AddItemButton({super.key});
+  const AddItemButton({super.key, required this.onItemAdded});
+
+   final VoidCallback onItemAdded;
 
   @override
   State<AddItemButton> createState() => _AddItemButtonState();
@@ -27,7 +29,7 @@ class _AddItemButtonState extends State<AddItemButton> {
 
     // Print detailed information for each item
     for (var item in allItems) {
-      debugPrint('Item: ${item.serialNumber}, Name: ${item.name}, Category: ${item.category}');
+      debugPrint('Item: ${item.serialNumber}, Name: ${item.name}, Category: ${item.category}, Quantity : ${item.quantity}');
     }
 
     debugPrint("Total items fetched: ${allItems.length}");
@@ -39,13 +41,16 @@ class _AddItemButtonState extends State<AddItemButton> {
     return FloatingActionButton(
       backgroundColor: AppColors.primaryColor,
       onPressed: () async {
-        await showModalBottomSheet(
+        final result = await showModalBottomSheet(
           context: context,
-          builder: (context) => const BottomSheetView(),
+          builder: (context) => const BottomSheetView(), // Your item-adding form
         );
-        _fetchItems();
+
+        if (result == true) {
+          widget.onItemAdded(); // Refresh items when a new item is added
+        }
       },
-      child: const Icon(Icons.add),
+      child: const Icon(Icons.add, color: Colors.white),
     );
   }
 }

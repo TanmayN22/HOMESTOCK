@@ -1,10 +1,8 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:home_stock/utils/themes/app_colors.dart';
 import 'package:home_stock/widgets/custom_widgets/curved_edges_widget.dart';
 import 'package:home_stock/widgets/custom_shapes/circular_shape.dart';
-import 'package:home_stock/widgets/custom_shapes/curved_edge_border.dart';
 
 // custom orange design created in the background with the curved clip
 class PrimaryHeaderContainer extends StatelessWidget {
@@ -20,10 +18,6 @@ class PrimaryHeaderContainer extends StatelessWidget {
     return CurvedEdgesWidget(
       child: Container(
         height: 400,
-        decoration: ShapeDecoration(
-          shape: const CurvedBorderShape(),
-          color: AppColors.whitecolor,
-        ),
         padding: const EdgeInsets.all(0),
         child: SizedBox(
           child: Stack(
