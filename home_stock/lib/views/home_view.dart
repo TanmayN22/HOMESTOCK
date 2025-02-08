@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:home_stock/utils/constants/sizes.dart';
 import 'package:home_stock/widgets/custom_shapes/primary_header_container.dart';
 import 'package:home_stock/widgets/custom_widgets/add_item_widget.dart';
-import 'package:home_stock/widgets/custom_widgets/category_horizontal_scroll.dart';
-import 'package:home_stock/widgets/custom_widgets/category_section.dart';
+import 'package:home_stock/widgets/custom_widgets/body_header_section.dart';
 import 'package:home_stock/widgets/custom_widgets/home_appbar.dart';
+import 'package:home_stock/widgets/custom_widgets/home_category_section.dart';
 import 'package:home_stock/widgets/custom_widgets/search_container_widget.dart';
 import 'package:home_stock/utils/constants/categories.dart';
 
@@ -41,38 +41,15 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(height: Sizes.spaceBtwSections),
 
                   // Categories
-                  Column(
-                    children: [
-                      // Heading of Category
-                      const Padding(
-                        padding: EdgeInsets.only(left: Sizes.spaceBtwSections),
-                        child: CategorySection(
-                          title: 'Categories',
-                          showActionButton: false,
-                        ),
-                      ),
-                      const SizedBox(height: Sizes.spaceBtwItems),
-
-                      // Categories of items
-                      SizedBox(
-                        height: 80,
-                        child: ListView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: categories.length, // Use dynamic count
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (_, index) {
-                            final category = categories[index];
-
-                            return CategoryHorizontalScroll(category: category);
-                          },
-                        ),
-                      )
-                    ],
-                  ),
+                  HomeCategorySection(categories: categories),
                 ],
               ),
             ),
+
+            // body
+            const ItemTitleAndExpirySection(
+              title: 'Items',
+            )
           ],
         ),
       ),
