@@ -3,6 +3,8 @@ import 'package:home_stock/database/db_helper.dart';
 import 'package:home_stock/models/item_model.dart';
 import 'package:home_stock/utils/themes/app_colors.dart';
 
+// shows list of items in container
+
 class ListOfItems extends StatefulWidget {
   const ListOfItems({super.key});
 
