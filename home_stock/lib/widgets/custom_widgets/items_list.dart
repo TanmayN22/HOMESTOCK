@@ -74,10 +74,39 @@ class ListOfItemsState extends State<ListOfItems> {
             itemCount: items.length,
             itemBuilder: (context, index) {
               final item = items[index];
+
+              // Parse expiry date from the item (assuming ISO 8601 format: YYYY-MM-DD)
+              DateTime expiry;
+              try {
+                expiry = DateTime.parse(item.expiryDate);
+              } catch (e) {
+                // If parsing fails, set it to a past date so it highlights as expired
+                expiry = DateTime.now().subtract(const Duration(days: 1));
+              }
+
+              // Calculate days remaining until expiry
+              int daysToExpire = expiry.difference(DateTime.now()).inDays;
+
+              // Determine the color based on daysToExpire
+              Color borderColor;
+              if (daysToExpire <= 0) {
+                borderColor = Colors.redAccent; // expired
+              } else if (daysToExpire <= 7) {
+                borderColor = Colors.orange; // expiring soon
+              } else if (daysToExpire <= 14) {
+                borderColor = Colors.yellow; // safe, but within 2 weeks
+              } else {
+                borderColor = Colors.green; // safe
+              }
+
+              // For debugging purposes, you can print out values:
+              print('Item: ${item.name}, Expiry: $expiry, Days left: $daysToExpire');
+
               return Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
                 child: Container(
                   decoration: BoxDecoration(
+                    border: Border.all(color: borderColor, width: 2),
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
@@ -154,35 +183,34 @@ class ListOfItemsState extends State<ListOfItems> {
                               padding: const EdgeInsets.all(4),
                               constraints: const BoxConstraints(),
                             ),
-                            const SizedBox(width: 10),
-
                             // Delete button
-                            // IconButton(
-                            //   icon: const Icon(Icons.delete_outline),
-                            //   color: Colors.redAccent,
-                            //   onPressed: () {
-                            //     showDialog(
-                            //       context: context,
-                            //       builder: (context) => AlertDialog(
-                            //         title: const Text("Delete Item"),
-                            //         content: Text("Are you sure you want to delete '${item.name}'?"),
-                            //         actions: [
-                            //           TextButton(
-                            //             onPressed: () => Navigator.pop(context),
-                            //             child: const Text("Cancel"),
-                            //           ),
-                            //           TextButton(
-                            //             onPressed: () {
-                            //               deleteItem(item);
-                            //               Navigator.pop(context);
-                            //             },
-                            //             child: const Text("Delete", style: TextStyle(color: Colors.red)),
-                            //           ),
-                            //         ],
-                            //       ),
-                            //     );
-                            //   },
-                            // ),
+
+                            IconButton(
+                              icon: const Icon(Icons.delete_outline),
+                              color: Colors.redAccent,
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: const Text("Delete Item"),
+                                    content: Text("Are you sure you want to delete '${item.name}'?"),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        child: const Text("Cancel"),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          deleteItem(item);
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text("Delete", style: TextStyle(color: Colors.red)),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
                           ],
                         ),
                       ],
@@ -190,7 +218,6 @@ class ListOfItemsState extends State<ListOfItems> {
                   ),
                 ),
               );
-            },
-          );
+            });
   }
 }

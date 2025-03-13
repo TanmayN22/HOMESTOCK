@@ -26,6 +26,7 @@ class CustomBottomNavBar extends StatelessWidget {
         color: selectedIndex == index ? selectedColor : unselectedColor,
       ),
       onPressed: () => onItemSelected(index),
+      
     );
   }
 
