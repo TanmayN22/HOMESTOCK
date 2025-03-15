@@ -23,8 +23,22 @@ class ListOfItemsState extends State<ListOfItems> {
 
   Future<void> loadItems() async {
     final loadedItems = await DBHelper.instance.getAllItems();
+    final now = DateTime.now();
     setState(() {
-      items = loadedItems;
+      items = loadedItems.where((item) {
+        DateTime expiry;
+        try {
+          expiry = DateTime.parse(item.expiryDate);
+        } catch (e) {
+          return false; // Treat as expired if invalid
+        }
+        final extendedExpiry = expiry.add(const Duration(days: 1));
+
+        bool notExpired = extendedExpiry.isAfter(now);
+        bool hasQuantity = item.quantity > 0;
+
+        return notExpired && hasQuantity;
+      }).toList();
     });
   }
 

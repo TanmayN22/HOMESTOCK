@@ -26,7 +26,7 @@ class FoodInventoryApp extends StatelessWidget {
   final List<Widget> _pages = [
     const HomePage(),
     const Cart(),
-    const FinishedExpiredItemsView(),
+    const BinPage(),
     const Profile(),
   ];
 
