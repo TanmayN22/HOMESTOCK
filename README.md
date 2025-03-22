@@ -124,4 +124,5 @@ Please ensure your code follows the project's style guidelines and passes all te
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
-⭐️ From [Tanmay Nayak](https://github.com/TanmayN22)
+
+[TanmayN22](https://github.com/TanmayN22)
