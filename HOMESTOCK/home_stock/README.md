@@ -23,6 +23,35 @@ HomeStock is a Flutter-based mobile application that helps you manage your home 
   <img src="https://github.com/user-attachments/assets/abee16bd-281d-40b0-9b05-1e10db08257f" alt="Screenshot 4" width="200"/>
 </div>
 
+## 🔧 Project Structure
+
+```
+lib/
+├── main.dart
+├── database
+├── models
+│   ├── repositories/
+│   └── services/
+├── utils/
+│   └── constants/
+│   └── device/
+│   └── helpers/
+│   └── themes/
+├── views
+└──  widgets
+     └── custom_shapes/
+     └── custom_widgets/
+
+```
+
+## 🛠️ Tech Stack
+
+- **Framework**: Flutter
+- **Language**: Dart
+- **State Management**: Getx
+- **Database**: SQLite
+- **CI/CD**: GitHub Actions
+
 ## 🚀 Installation
 
 ### Prerequisites
@@ -50,21 +79,14 @@ flutter build apk
 flutter build ios
 ```
 
-## 🛠️ Tech Stack
-
-- **Framework**: Flutter
-- **Language**: Dart
-- **State Management**: Getx
-- **Database**: SQLite
-- **CI/CD**: GitHub Actions
-
 ## 📋 Usage Guide
 
 1. **Adding Items**: Tap the "+" button to add new items to your inventory
 2. **Managing Quantities**: Use the +/- buttons to adjust quantities
-3. **Shopping**: Items with 0 quantity are added to shopping suggestions
-4. **Expiration Tracking**: Items are color-coded based on expiration status
-5. **Bin Management**: Access the Bin to see expired or finished items
+3. **Expiration Tracking**: Items are color-coded based on expiration status green, yellow, orange and red
+4. **Bin Management**: Access the Bin to see expired or finished items
+5. **Cart**: Items from the finished or expired items can be added to the cart
+6. **Local Notifications**: Items expiry will be time to time notified to the user 
 
 ## 🧪 Running Tests
 
@@ -101,25 +123,5 @@ Please ensure your code follows the project's style guidelines and passes all te
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🔧 Project Structure
-
-```
-lib/
-├── main.dart
-├── database
-├── models
-│   ├── repositories/
-│   └── services/
-├── utils/
-│   └── constants/
-│   └── device/
-│   └── helpers/
-│   └── themes/
-├── views
-└──  widgets
-     └── custom_shapes/
-     └── custom_widgets/
-
-```
 ---
 ⭐️ From [Tanmay Nayak](https://github.com/TanmayN22)
