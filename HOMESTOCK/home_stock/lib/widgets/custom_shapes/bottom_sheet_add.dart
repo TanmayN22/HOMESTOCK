@@ -25,7 +25,7 @@ class _BottomSheetViewState extends State<BottomSheetView> {
   List<String> category = CategoryConstants.categories;
   List<String> quantity = CategoryConstants.units;
 
-  String? selectedCategory = 'Vegetables';
+  String? selectedCategory = 'Vegetables & Fruits';
   String? selectedUnit = 'Kg';
   bool isUpdate = false;
 

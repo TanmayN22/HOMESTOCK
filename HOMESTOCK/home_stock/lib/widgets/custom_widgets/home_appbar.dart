@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:home_stock/utils/themes/app_colors.dart';
 import 'package:home_stock/widgets/custom_widgets/appbar.dart';
-import 'package:home_stock/widgets/custom_widgets/notification_icon.dart';
+// import 'package:home_stock/widgets/custom_widgets/notification_icon.dart';
 
 // final custom home page's appbar
 class HomeAppBar extends StatelessWidget {
@@ -27,10 +27,10 @@ class HomeAppBar extends StatelessWidget {
         ],
       ),
       actions: [
-        NotificationIcon(
-          onPressed: () {},
-          iconColor: AppColors.whitecolor,
-        ),
+        // NotificationIcon(
+        //   onPressed: () {},
+        //   iconColor: AppColors.whitecolor,
+        // ),
         Icon(
           Icons.circle_rounded,
           color: AppColors.whitecolor,

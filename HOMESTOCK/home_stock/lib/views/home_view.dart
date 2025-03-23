@@ -104,6 +104,7 @@ class _HomePageState extends State<HomePage> {
       // ✅ Refreshes item list when adding a new item
       floatingActionButton: AddItemButton(onItemAdded: _refreshItems),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
+      // remove this later
     );
   }
 }

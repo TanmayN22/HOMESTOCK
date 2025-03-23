@@ -1,11 +1,11 @@
 // ignore_for_file: constant_identifier_names
-
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import '../models/item_model.dart';
+import '../utils/helpers/noti_service.dart'; // <-- Make sure this import matches your structure
 
 class DBHelper {
   DBHelper._();
@@ -86,7 +86,7 @@ class DBHelper {
     }
   }
 
-  // ✅ Insert item into DB
+  // ✅ Insert item into DB and schedule expiry notifications
   Future<bool> addItem(Item item) async {
     try {
       final db = await database;
@@ -95,6 +95,16 @@ class DBHelper {
         item.toMap(),
       );
       debugPrint('✅ Item inserted successfully');
+
+      if (rowsAffected > 0) {
+        // Schedule expiry notifications (14, 7, 3, 1 days)
+        await NotiService().scheduleExpiryNotifications(
+          itemId: item.serialNumber ?? 0,
+          itemName: item.name,
+          expiryDate: DateTime.parse(item.expiryDate),
+        );
+      }
+
       return rowsAffected > 0;
     } catch (e) {
       debugPrint("❌ Error inserting item: $e");
@@ -115,7 +125,7 @@ class DBHelper {
     }
   }
 
-  // ✅ Update item in DB
+  // ✅ Update item in DB and reschedule expiry notifications
   Future<bool> updateItem(Item item) async {
     try {
       final db = await database;
@@ -126,6 +136,20 @@ class DBHelper {
         whereArgs: [item.serialNumber],
       );
       debugPrint('✅ Item updated successfully');
+
+      if (rowsUpdated > 0) {
+        // Cancel previous notifications
+        if (item.serialNumber != null) {
+          await NotiService().cancelExpiryNotifications(item.serialNumber!);
+
+          // Reschedule expiry notifications
+          await NotiService().scheduleExpiryNotifications(
+            itemId: item.serialNumber!,
+            itemName: item.name,
+            expiryDate: DateTime.parse(item.expiryDate),
+          );
+        }
+      }
       return rowsUpdated > 0;
     } catch (e) {
       debugPrint('❌ Error updating item: $e');
@@ -133,7 +157,7 @@ class DBHelper {
     }
   }
 
-  // ✅ Delete item from DB
+  // ✅ Delete item from DB and cancel expiry notifications
   Future<bool> deleteItem({required int sno}) async {
     try {
       var db = await database;
@@ -143,6 +167,12 @@ class DBHelper {
         whereArgs: [sno],
       );
       debugPrint('✅ Item deleted successfully');
+
+      if (rowsDeleted > 0) {
+        // Cancel notifications for deleted item
+        await NotiService().cancelExpiryNotifications(sno);
+      }
+
       return rowsDeleted > 0;
     } catch (e) {
       debugPrint('❌ Error deleting item: $e');
@@ -158,6 +188,7 @@ class DBHelper {
     debugPrint('🗑️ Database deleted at $dbPath');
   }
 
+  // ✅ Get items in cart
   Future<List<Item>> getCartItems() async {
     try {
       final db = await database;

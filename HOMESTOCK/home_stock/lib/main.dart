@@ -8,9 +8,9 @@ import 'package:home_stock/views/profile_view.dart';
 import 'package:home_stock/widgets/custom_widgets/bottom_nav_bar.dart';
 import 'package:home_stock/models/item_model.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  NotiService().initNotification();
+  await NotiService().initNotification();
   runApp(const FoodInventoryApp());
 }
 
