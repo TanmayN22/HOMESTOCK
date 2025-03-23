@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:home_stock/utils/helpers/noti_service.dart';
 import 'package:home_stock/views/home_view.dart';
 import 'package:home_stock/views/cart_view.dart';
 import 'package:home_stock/views/finished_expired_items_view.dart';
@@ -8,6 +9,8 @@ import 'package:home_stock/widgets/custom_widgets/bottom_nav_bar.dart';
 import 'package:home_stock/models/item_model.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  NotiService().initNotification();
   runApp(const FoodInventoryApp());
 }
 
@@ -56,7 +59,10 @@ class _FoodInventoryAppState extends State<FoodInventoryApp> {
       case 1:
         return Cart(cartItems: cartItems); // ✅ CartPage (updated name)
       case 2:
-        return BinPage(cartItems: cartItems, onCartChanged: () {  },);
+        return BinPage(
+          cartItems: cartItems,
+          onCartChanged: () {},
+        );
       case 3:
         return const Profile();
       default:
