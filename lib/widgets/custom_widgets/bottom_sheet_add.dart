@@ -130,32 +130,34 @@ class _BottomSheetViewState extends State<BottomSheetView> {
           Row(
             children: [
               // Category Dropdown
-              Padding(
-                padding: const EdgeInsets.only(right: 20),
-                child: DropdownMenu(
-                  menuStyle: MenuStyle(
-                    shape: WidgetStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(11),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: DropdownMenu(
+                    menuStyle: MenuStyle(
+                      shape: WidgetStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(11),
+                        ),
                       ),
                     ),
+                    width: 150,
+                    initialSelection: selectedCategory,
+                    dropdownMenuEntries:
+                        category
+                            .map(
+                              (category) => DropdownMenuEntry(
+                                value: category,
+                                label: category,
+                              ),
+                            )
+                            .toList(),
+                    onSelected: (String? value) {
+                      setState(() {
+                        selectedCategory = value;
+                      });
+                    },
                   ),
-                  width: 150,
-                  initialSelection: selectedCategory,
-                  dropdownMenuEntries:
-                      category
-                          .map(
-                            (category) => DropdownMenuEntry(
-                              value: category,
-                              label: category,
-                            ),
-                          )
-                          .toList(),
-                  onSelected: (String? value) {
-                    setState(() {
-                      selectedCategory = value;
-                    });
-                  },
                 ),
               ),
 
